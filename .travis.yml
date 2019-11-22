@@ -1,8 +1,12 @@
 language: java
-install: true
-
 os: linux
 jdk: openjdk8
+
+notifications:
+  email: false
+
+install:
+  - gradle wrapper
 
 script:
   - ./gradlew build
