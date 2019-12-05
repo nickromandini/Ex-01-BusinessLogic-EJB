@@ -48,7 +48,7 @@ public class Purchase implements Serializable {
 
     @ManyToOne(
             cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER
     )
     public Customer getCustomer() { return customer; }
 
@@ -56,7 +56,7 @@ public class Purchase implements Serializable {
 
     @OneToMany(
             cascade={CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
-            fetch=FetchType.LAZY,
+            fetch=FetchType.EAGER,
             mappedBy = "purchase"
     )
     public Set<Product> getProducts() { return products; }

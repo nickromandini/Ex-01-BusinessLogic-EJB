@@ -42,13 +42,20 @@ import javax.persistence.PersistenceContext;
 
         if (purchase.getProducts()!= null ){
             for (Product product : purchase.getProducts()){
-                if(product != null && product.getId() > 0)
+                if(product != null && product.getId() > 0) {
                     products.add(em.merge(product));
+                }
             }
             purchase.setProducts(products);
         }
 
         em.persist(purchase);
+        for (Product product : purchase.getProducts()){
+            if(product != null && product.getId() > 0) {
+                product.setPurchase(purchase);
+                em.merge(product);
+            }
+        }
         return purchase.getId();
     }
 

@@ -83,6 +83,23 @@
 			product.setProducer(producer);
 			int id = productDAO.insertProduct(product);
 			out.println("<!-- inserted product '" + product.getName() + "' with id = '" + id + "' -->");
+		} else if(operation != null && operation.equals("insertPurchase") ) {
+
+			Product product = productDAO.findProductByNumber(Integer.parseInt(request.getParameter("product")));
+			Customer customer = customerDAO.findCustomerByName(request.getParameter("customer"));
+			Purchase purchase = new Purchase();
+			purchase.setCustomer(customer);
+			Set products = new HashSet<Product>();
+			products.add(product);
+			purchase.setProducts(products);
+			int id = purchaseDAO.insertPurchase(purchase);
+			out.println("<!-- inserted purchase '" + purchase.getPurchaseNumber() + "' with id = '" + id + "' -->");
+		} else if(operation != null && operation.equals("test") ) {
+			out.println(Integer.parseInt(request.getParameter("id")));
+
+			Purchase purchase = purchaseDAO.findPurchaseById(Integer.parseInt(request.getParameter("id")));
+			out.println("purch " + purchase.getCustomer().getName());
+			out.println("products " + purchase.getProducts().size());
 		}
 
 		//Da aggiungere la possibilità di fare un ordine in sessione e di finalizzarla per creare un purchase.
@@ -133,7 +150,7 @@
 				while ( iterator.hasNext() ) {
 					Producer producer = (Producer) iterator.next();
 			%>
-			<option value="<%= producer.getId() %>"><%= producer.getName()%></option>
+			<option value="<%= producer.getName() %>"><%= producer.getName()%></option>
 			<%
 				}// end while
 			%>
@@ -152,6 +169,53 @@
 	<%
 		} // end else
 	%>
+	<%
+		List products = productDAO.getAllProducts();
+		List customers = customerDAO.getAllCustomers();
+		if ( products.size() > 0 && customers.size() > 0) {
+	%>
+	<div>
+		<p>Add Purchase:</p>
+		<form>
+			Customer: <select name="customer">
+				<%
+				Iterator iterator = customers.iterator();
+				while ( iterator.hasNext() ) {
+					Customer customer = (Customer) iterator.next();
+			%>
+			<option value="<%= customer.getName() %>"><%= customer.getName()%></option>
+				<%
+				}// end while
+			%>
+		</select>
+			Products: <select name="product">
+				<%
+				iterator = products.iterator();
+				while ( iterator.hasNext() ) {
+					Product product = (Product) iterator.next();
+			%>
+			<option value="<%= product.getProductNumber() %>"><%= product.getProductNumber()%></option>
+				<%
+				}// end while
+			%>
+		</select>
+			<input type="hidden" name="operation" value="insertPurchase"/>
+			<input type="submit" name="submit" value="submit"/>
+		</form>
+	</div>
+	<%
+	}// end if
+	else {
+	%>
+	<div>
+		<p>Not possibile to add a purchase.</p>
+	</div>
+	<%
+		} // end else
+	%>
+	<div>
+
+	</div>
 	<div>
 		<p>Products currently in the database:</p>
 		<table>
@@ -159,7 +223,11 @@
 			<%= printTableRows( productDAO.getAllProducts(), request.getContextPath() ) %>
 		</table>
 	</div>
-
+	<form>
+		<input type="text" name="id"/><br/>
+		<input type="hidden" name="operation" value="test"/>
+		<input type="submit" name="submit" value="submit"/>
+	</form>
 	<div>
 		<a href="<%= request.getContextPath() %>">Ricarica lo stato iniziale di questa pagina</a>
 	</div>

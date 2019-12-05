@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Stateless
-@Local(CustomerDAO.class)
+@Local(ProducerDAO.class)
 //@Remote(CustomerDAO.class) //-> TODO: serve nella versione clustering???
 public class EJB3ProducerDAO implements ProducerDAO {
 

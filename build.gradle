@@ -9,7 +9,7 @@ plugins {
     id 'ear'
 }
 
-def wildfly_home="/home/nghiselli/Projects/DistributedSystemsM/JBoss/wildfly-17.0.1.Final"
+def wildfly_home="C:/wildfly-18.0.1.Final"
 
 repositories {
     maven { url "https://repository.jboss.org/nexus/content/groups/public/" }
@@ -115,11 +115,12 @@ task deployEar( ){
 
     println("deleting old deployments.....")
     delete("$wildfly_home/standalone/deployments/distributed-systems-demo.ear")
+    delete("$wildfly_home/standalone/deployments/distributed-systems-demo.ear.deployed")
     println("old depployments deleted.....")
 
     copy(){
         from "$buildDir/libs/distributed-systems-demo.ear"
-        into "$wildfly_home/standalone/deployments/"
+        into "$wildfly_home/standalone/deployments"
     }
 
     println("Application deployed!")
