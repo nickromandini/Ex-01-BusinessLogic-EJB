@@ -3,6 +3,7 @@ package it.distributedsystems.model.ejb;
 //import it.distributedsystems.model.logging.OperationLogger;
 import it.distributedsystems.model.dao.Customer;
 import it.distributedsystems.model.dao.CustomerDAO;
+import it.distributedsystems.model.interceptors.OperationLogger;
 
 import javax.ejb.*;
 import javax.interceptor.Interceptors;
@@ -19,7 +20,7 @@ public class EJB3CustomerDAO implements CustomerDAO {
     EntityManager em;
 
     @Override
-//    @Interceptors(OperationLogger.class)
+    @Interceptors(OperationLogger.class)
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public int insertCustomer(Customer customer) {
         em.persist(customer);
